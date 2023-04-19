@@ -2,14 +2,14 @@ package main
 
 import (
 	"GoCommunityAPI/config"
-	"GoCommunityAPI/database"
+	"GoCommunityAPI/databases"
 
 	"github.com/gin-gonic/gin"
 )
 
 func init() {
 	config.LoadEnvVariables()
-	database.ConnectToDB()
+	databases.ConnectToDB()
 }
 
 func main() {

@@ -16,12 +16,6 @@ func init() {
 func main() {
 	goEngin := gin.Default()
 
-	goEngin.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-
 	apiRouteGroup := goEngin.Group("/api")
 
 	controllers.RegisterUserRoutes(apiRouteGroup.Group("/user"))

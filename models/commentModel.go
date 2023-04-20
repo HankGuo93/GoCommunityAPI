@@ -1,9 +1,10 @@
 package models
 
 type CommentModel struct {
-	Content    string
-	Author_id  int
-	Article_id int
-	Created_at int64
-	Updated_at int64
+	Content   string
+	UserId    int
+	ArticleId int
+	CreatedAt int64
+	UpdatedAt int64
+	DeletedAt int64
 }

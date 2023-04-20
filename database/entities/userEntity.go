@@ -1,12 +1,20 @@
 package entities
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+	"gorm.io/plugin/soft_delete"
+)
 
 type UserEntity struct {
 	gorm.Model
-	Name       string `gorm:"not null"`
-	Email      string `gorm:"not null"`
-	Password   string `gorm:"not null"`
-	Created_at int64  `gorm:"not null"`
-	Updated_at int64  `gorm:"not null"`
+	Name      string `gorm:"not null"`
+	Email     string `gorm:"not null;unique"`
+	Password  string `gorm:"not null"`
+	CreatedAt int64  `gorm:"autoCreateTime"`
+	UpdatedAt int64  `gorm:"autoUpdateTime"`
+	DeletedAt soft_delete.DeletedAt
+}
+
+func (UserEntity) TableName() string {
+	return "users"
 }

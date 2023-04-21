@@ -8,9 +8,9 @@ import (
 
 func FindOneUser(email string) (user models.UserModel, err error) {
 	db := database.DB
-	query := db.Model(&entities.UserEntity{}).Where(&entities.UserEntity{Email: email})
 	var entity entities.UserEntity
-	err = query.Find(&entity).Error
+	query := db.Model(&entities.UserEntity{})
+	err = query.First(&entity, "email = ?", email).Error
 	user = models.UserModel{
 		Name:      entity.Name,
 		Email:     entity.Email,
@@ -28,7 +28,6 @@ func AddUser(user *models.UserModel) error {
 		Email:    user.Email,
 		Password: user.Password,
 	}
-
 	err := db.Create(&entity).Error
 	return err
 }

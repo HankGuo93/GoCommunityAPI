@@ -10,7 +10,24 @@ import (
 )
 
 func RegisterUserRoutes(router *gin.RouterGroup) {
+	router.GET("/:email", FindUser)
 	router.POST("/", UserRegistration)
+}
+
+func FindUser(c *gin.Context) {
+	email := c.Param("email")
+	user, err := services.GetUser(email)
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database", err))
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"name":     user.Name,
+		"email":    user.Email,
+		"CreateAt": user.CreatedAt,
+		"UpdateAt": user.UpdatedAt,
+		"DeleteAt": user.DeletedAt,
+	})
 }
 
 func UserRegistration(c *gin.Context) {

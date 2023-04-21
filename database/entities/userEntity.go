@@ -7,12 +7,12 @@ import (
 
 type UserEntity struct {
 	gorm.Model
-	Name      string `gorm:"not null"`
-	Email     string `gorm:"not null;unique"`
-	Password  string `gorm:"not null"`
-	CreatedAt int64  `gorm:"autoCreateTime"`
-	UpdatedAt int64  `gorm:"autoUpdateTime"`
-	DeletedAt soft_delete.DeletedAt
+	Name      string                `gorm:"not null"`
+	Email     string                `gorm:"not null;unique"`
+	Password  string                `gorm:"not null"`
+	CreatedAt int64                 `gorm:"autoCreateTime"`
+	UpdatedAt int64                 `gorm:"autoUpdateTime"`
+	DeletedAt soft_delete.DeletedAt `gorm:"softDelete;default:null"`
 }
 
 func (UserEntity) TableName() string {

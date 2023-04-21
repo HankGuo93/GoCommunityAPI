@@ -7,11 +7,11 @@ import (
 
 type ArticleEntiry struct {
 	gorm.Model
-	Title     string `gorm:"not null"`
-	Content   string `gorm:"not null"`
-	CreatedAt int64  `gorm:"autoCreateTime"`
-	UpdatedAt int64  `gorm:"autoUpdateTime"`
-	DeletedAt soft_delete.DeletedAt
+	Title     string                `gorm:"not null"`
+	Content   string                `gorm:"not null"`
+	CreatedAt int64                 `gorm:"autoCreateTime"`
+	UpdatedAt int64                 `gorm:"autoUpdateTime"`
+	DeletedAt soft_delete.DeletedAt `gorm:"softDelete;default:null"`
 
 	User   UserEntity `gorm:"association_foreignkey:UserId:"`
 	UserId int        `gorm:"not null"`

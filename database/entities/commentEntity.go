@@ -7,10 +7,10 @@ import (
 
 type CommentEntity struct {
 	gorm.Model
-	Content   string `gorm:"not null"`
-	CreatedAt int64  `gorm:"autoCreateTime"`
-	UpdatedAt int64  `gorm:"autoUpdateTime"`
-	DeletedAt soft_delete.DeletedAt
+	Content   string                `gorm:"not null"`
+	CreatedAt int64                 `gorm:"autoCreateTime"`
+	UpdatedAt int64                 `gorm:"autoUpdateTime"`
+	DeletedAt soft_delete.DeletedAt `gorm:"softDelete;default:null"`
 
 	User      UserEntity    `gorm:"association_foreignkey:UserId:"`
 	UserId    int           `gorm:"not null"`

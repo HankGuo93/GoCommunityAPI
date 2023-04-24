@@ -22,6 +22,7 @@ func FindUser(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
+		"id":       user.Id,
 		"name":     user.Name,
 		"email":    user.Email,
 		"CreateAt": user.CreatedAt,

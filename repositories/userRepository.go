@@ -12,6 +12,7 @@ func FindOneUser(email string) (user models.UserModel, err error) {
 	query := db.Model(&entities.UserEntity{})
 	err = query.First(&entity, "email = ?", email).Error
 	user = models.UserModel{
+		Id:        int(entity.ID),
 		Name:      entity.Name,
 		Email:     entity.Email,
 		Password:  entity.Password,

@@ -1,31 +1,117 @@
 package controllers
 
-import "github.com/gin-gonic/gin"
+import (
+	"GoCommunityAPI/dtos"
+	"GoCommunityAPI/models"
+	"GoCommunityAPI/services"
+	"net/http"
+	"strconv"
 
-func RegisteArticleRoutes(router *gin.RouterGroup) {
-	router.GET("/", GetArticleList)
+	"github.com/gin-gonic/gin"
+)
+
+func RegisterArticleRoutes(router *gin.RouterGroup) {
+	router.GET("", GetArticleList)
 	router.GET("/:id", GetArticleDetail)
 	router.POST("/", UploadArticle)
-	router.POST("/:id", UpdateArticle)
+	router.PUT("/:id", UpdateArticle)
 	router.DELETE("/:id", DeleteArticle)
 }
 
 func GetArticleList(c *gin.Context) {
-
+	page, err := strconv.Atoi(c.Query("page"))
+	if err != nil {
+		page = 1
+	}
+	pageSize, err := strconv.Atoi(c.Query("pageSize"))
+	if err != nil {
+		pageSize = 5
+	}
+	articles, err := services.GetArticleList(page, pageSize)
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database", err))
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"page":     page,
+		"pageSize": pageSize,
+		"articles": dtos.CreateArticlePageResponse(articles),
+	})
 }
 
 func GetArticleDetail(c *gin.Context) {
-
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, dtos.CreateErrorDtoWithMessage("You must provide a valid article id"))
+	}
+	article, err := services.GetArticleDetail(id)
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database", err))
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"Id":      article.Id,
+		"Title":   article.Title,
+		"Content": article.Content,
+		"User": map[string]interface{}{
+			"Id":    article.User.Id,
+			"Name":  article.User.Name,
+			"Email": article.User.Email,
+		},
+	})
 }
 
 func UploadArticle(c *gin.Context) {
+	var json dtos.ArticleDto
+	if err := c.ShouldBind(&json); err != nil {
+		c.JSON(http.StatusBadRequest, dtos.CreateBadRequestErrorDto(err))
+		return
+	}
+	err := services.UploadArticle(models.ArticleModel{
+		Title:   json.Title,
+		Content: json.Content,
+		UserId:  json.UserId,
+	})
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database_error", err))
+		return
+	}
 
+	c.JSON(http.StatusCreated, gin.H{
+		"success":  true,
+		"messages": []string{"Article created successfully"}})
 }
 
 func UpdateArticle(c *gin.Context) {
-
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, dtos.CreateErrorDtoWithMessage("You must provide a valid article id"))
+	}
+	var json dtos.ArticleDto
+	if err = c.ShouldBind(&json); err != nil {
+		c.JSON(http.StatusBadRequest, dtos.CreateBadRequestErrorDto(err))
+		return
+	}
+	err = services.UpdateArticle(models.ArticleModel{
+		Id:      id,
+		Title:   json.Title,
+		Content: json.Content,
+		UserId:  json.UserId,
+	})
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database_error", err))
+		return
+	}
 }
 
 func DeleteArticle(c *gin.Context) {
-
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, dtos.CreateErrorDtoWithMessage("You must provide a valid article id"))
+	}
+	err = services.DeleteArticle(id)
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database_error", err))
+		return
+	}
 }

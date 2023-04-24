@@ -44,3 +44,10 @@ func CreateDetailedErrorDto(key string, err error) map[string]interface{} {
 		"errors":   err,
 	}
 }
+
+func CreateErrorDtoWithMessage(message string) map[string]interface{} {
+	return map[string]interface{}{
+		"success":       false,
+		"full_messages": []string{message},
+	}
+}

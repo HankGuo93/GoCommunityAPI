@@ -98,6 +98,7 @@ func UpdateArticle(article models.ArticleModel) error {
 
 func DeleteArticle(articleId int) error {
 	db := database.DB
-	err := db.Model(&entities.ArticleEntity{}).Where("id = ?", articleId).Update("deleted_at", time.Time.Unix(time.Now())).Error
+	query := db.Model(&entities.ArticleEntity{}).Where("id = ?", articleId)
+	err := query.Update("deleted_at", time.Time.Unix(time.Now())).Error
 	return err
 }

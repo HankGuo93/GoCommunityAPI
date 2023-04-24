@@ -19,8 +19,8 @@ func main() {
 	apiRouteGroup := goEngin.Group("/api")
 
 	controllers.RegisterUserRoutes(apiRouteGroup.Group("/user"))
-	controllers.RegisterUserRoutes(apiRouteGroup.Group("/article"))
-	controllers.RegisterUserRoutes(apiRouteGroup.Group("/comment"))
+	controllers.RegisterArticleRoutes(apiRouteGroup.Group("/article"))
+	controllers.RegisterCommentRoutes(apiRouteGroup.Group("/comment"))
 
 	goEngin.Run()
 }

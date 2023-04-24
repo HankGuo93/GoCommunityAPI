@@ -1,6 +1,7 @@
 package models
 
 type CommentModel struct {
+	Id        int
 	Content   string
 	UserId    int
 	ArticleId int

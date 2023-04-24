@@ -3,6 +3,7 @@ package dtos
 import "GoCommunityAPI/models"
 
 type UserDto struct {
+	Id        int
 	Name      string
 	Email     string
 	Password  string
@@ -13,6 +14,7 @@ type UserDto struct {
 
 func CreateUserDto(user *models.UserModel) UserDto {
 	return UserDto{
+		Id:        user.Id,
 		Name:      user.Email,
 		Email:     user.Email,
 		Password:  user.Password,

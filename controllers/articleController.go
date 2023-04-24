@@ -7,7 +7,7 @@ func RegisteArticleRoutes(router *gin.RouterGroup) {
 	router.GET("/:id", GetArticleDetail)
 	router.POST("/", UploadArticle)
 	router.POST("/:id", UpdateArticle)
-	router.DELETE("/:id", ArticleDelete)
+	router.DELETE("/:id", DeleteArticle)
 }
 
 func GetArticleList(c *gin.Context) {
@@ -26,6 +26,6 @@ func UpdateArticle(c *gin.Context) {
 
 }
 
-func ArticleDelete(c *gin.Context) {
+func DeleteArticle(c *gin.Context) {
 
 }

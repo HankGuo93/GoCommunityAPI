@@ -19,9 +19,9 @@ func FetchArticlesPage(page int, pageSize int) (article []models.ArticleModel, e
 		Preload("User").
 		Order("created_at desc").Offset((page - 1) * pageSize).Limit(pageSize).Find(&entities)
 	err = transaction.Commit().Error
-	results := make([]models.ArticleModel, len(entities))
+	article = make([]models.ArticleModel, len(entities))
 	for index, entity := range entities {
-		results[index] = models.ArticleModel{
+		article[index] = models.ArticleModel{
 			Id:        int(entity.ID),
 			Title:     entity.Title,
 			Content:   entity.Content,
@@ -39,7 +39,7 @@ func FetchArticlesPage(page int, pageSize int) (article []models.ArticleModel, e
 			},
 		}
 	}
-	return results, err
+	return article, err
 }
 
 func FindOneArticle(articleId int) (article models.ArticleModel, err error) {

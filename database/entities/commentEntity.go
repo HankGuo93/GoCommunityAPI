@@ -14,7 +14,7 @@ type CommentEntity struct {
 
 	User      UserEntity    `gorm:"association_foreignkey:UserId:"`
 	UserId    int           `gorm:"not null"`
-	Article   ArticleEntiry `gorm:"association_foreignkey:Article_id"`
+	Article   ArticleEntity `gorm:"association_foreignkey:Article_id"`
 	ArticleId int           `gorm:"not null"`
 }
 

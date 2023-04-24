@@ -5,7 +5,7 @@ import (
 	"gorm.io/plugin/soft_delete"
 )
 
-type ArticleEntiry struct {
+type ArticleEntity struct {
 	gorm.Model
 	Title     string                `gorm:"not null"`
 	Content   string                `gorm:"not null"`
@@ -17,6 +17,6 @@ type ArticleEntiry struct {
 	UserId int        `gorm:"not null"`
 }
 
-func (ArticleEntiry) TableName() string {
+func (ArticleEntity) TableName() string {
 	return "articles"
 }

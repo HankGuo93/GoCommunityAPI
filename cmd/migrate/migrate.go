@@ -13,6 +13,6 @@ func init() {
 
 func main() {
 	database.DB.AutoMigrate(&entities.UserEntity{})
-	database.DB.AutoMigrate(&entities.ArticleEntiry{})
+	database.DB.AutoMigrate(&entities.ArticleEntity{})
 	database.DB.AutoMigrate(&entities.CommentEntity{})
 }

@@ -7,4 +7,6 @@ type CommentModel struct {
 	CreatedAt int64
 	UpdatedAt int64
 	DeletedAt int64
+
+	User UserModel
 }

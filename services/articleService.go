@@ -21,11 +21,19 @@ func UploadArticle(article models.ArticleModel) error {
 }
 
 func UpdateArticle(article models.ArticleModel) error {
-	err := repositories.UpdateArticle(article)
+	_, err := repositories.FindOneArticle(article.Id)
+	if err != nil {
+		return err
+	}
+	err = repositories.UpdateArticle(article)
 	return err
 }
 
 func DeleteArticle(articleId int) error {
-	err := repositories.DeleteArticle(articleId)
+	_, err := repositories.FindOneArticle(articleId)
+	if err != nil {
+		return err
+	}
+	err = repositories.DeleteArticle(articleId)
 	return err
 }

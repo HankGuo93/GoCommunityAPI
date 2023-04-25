@@ -6,7 +6,23 @@ import (
 	"GoCommunityAPI/models"
 )
 
-func FindOneUser(email string) (user models.UserModel, err error) {
+func FindOneUserById(id int) (user models.UserModel, err error) {
+	db := database.DB
+	var entity entities.UserEntity
+	query := db.Model(&entities.UserEntity{})
+	err = query.First(&entity, "id = ?", id).Error
+	user = models.UserModel{
+		Id:        int(entity.ID),
+		Name:      entity.Name,
+		Email:     entity.Email,
+		Password:  entity.Password,
+		CreatedAt: entity.CreatedAt,
+		UpdatedAt: entity.UpdatedAt,
+	}
+	return user, err
+}
+
+func FindOneUserByEmail(email string) (user models.UserModel, err error) {
 	db := database.DB
 	var entity entities.UserEntity
 	query := db.Model(&entities.UserEntity{})

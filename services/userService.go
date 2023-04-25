@@ -6,7 +6,7 @@ import (
 )
 
 func GetUser(email string) (models.UserModel, error) {
-	user, err := repositories.FindOneUser(email)
+	user, err := repositories.FindOneUserByEmail(email)
 	return user, err
 }
 

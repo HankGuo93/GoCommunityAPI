@@ -12,6 +12,7 @@ import (
 func RegisterUserRoutes(router *gin.RouterGroup) {
 	router.GET("/:email", FindUser)
 	router.POST("/", UserRegistration)
+	router.POST("/login", Login)
 }
 
 func FindUser(c *gin.Context) {
@@ -50,4 +51,26 @@ func UserRegistration(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{
 		"success":  true,
 		"messages": []string{"User created successfully"}})
+}
+
+func Login(c *gin.Context) {
+	var json dtos.UserDto
+	if err := c.ShouldBindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, dtos.CreateBadRequestErrorDto(err))
+		return
+	}
+
+	tokenString, err := services.Login(models.UserModel{
+		Email:    json.Email,
+		Password: json.Password,
+	})
+
+	if err != nil {
+		c.JSON(http.StatusForbidden, dtos.CreateDetailedErrorDto("login", err))
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"token": tokenString,
+	})
 }

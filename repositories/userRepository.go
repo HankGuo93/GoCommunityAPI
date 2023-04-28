@@ -38,7 +38,7 @@ func FindOneUserByEmail(email string) (user models.UserModel, err error) {
 	return user, err
 }
 
-func AddUser(user *models.UserModel) error {
+func AddUser(user models.UserModel) error {
 	db := database.DB
 	entity := entities.UserEntity{
 		Name:     user.Name,

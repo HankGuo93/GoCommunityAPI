@@ -38,7 +38,7 @@ func UserRegistration(c *gin.Context) {
 		return
 	}
 
-	if err := services.CreateUser(&models.UserModel{
+	if err := services.CreateUser(models.UserModel{
 		Name:     json.Name,
 		Email:    json.Email,
 		Password: json.Password,

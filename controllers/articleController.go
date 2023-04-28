@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"GoCommunityAPI/dtos"
+	"GoCommunityAPI/middlewares"
 	"GoCommunityAPI/models"
 	"GoCommunityAPI/services"
 	"net/http"
@@ -13,9 +14,9 @@ import (
 func RegisterArticleRoutes(router *gin.RouterGroup) {
 	router.GET("", GetArticleList)
 	router.GET("/:id", GetArticleDetail)
-	router.POST("/", UploadArticle)
-	router.PUT("/:id", UpdateArticle)
-	router.DELETE("/:id", DeleteArticle)
+	router.POST("/", middlewares.RequereAuth, UploadArticle)
+	router.PUT("/:id", middlewares.RequereAuth, UpdateArticle)
+	router.DELETE("/:id", middlewares.RequereAuth, DeleteArticle)
 }
 
 func GetArticleList(c *gin.Context) {
@@ -62,6 +63,7 @@ func GetArticleDetail(c *gin.Context) {
 }
 
 func UploadArticle(c *gin.Context) {
+	userId, _ := c.Get("userId")
 	var json dtos.ArticleDto
 	if err := c.ShouldBind(&json); err != nil {
 		c.JSON(http.StatusBadRequest, dtos.CreateBadRequestErrorDto(err))
@@ -70,7 +72,7 @@ func UploadArticle(c *gin.Context) {
 	err := services.UploadArticle(models.ArticleModel{
 		Title:   json.Title,
 		Content: json.Content,
-		UserId:  json.UserId,
+		UserId:  userId.(int),
 	})
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database_error", err))
@@ -83,6 +85,7 @@ func UploadArticle(c *gin.Context) {
 }
 
 func UpdateArticle(c *gin.Context) {
+	userId, _ := c.Get("userId")
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, dtos.CreateErrorDtoWithMessage("You must provide a valid article id"))
@@ -96,7 +99,7 @@ func UpdateArticle(c *gin.Context) {
 		Id:      id,
 		Title:   json.Title,
 		Content: json.Content,
-		UserId:  json.UserId,
+		UserId:  userId.(int),
 	})
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database_error", err))

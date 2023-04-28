@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"GoCommunityAPI/dtos"
+	"GoCommunityAPI/middlewares"
 	"GoCommunityAPI/models"
 	"GoCommunityAPI/services"
 	"net/http"
@@ -12,8 +13,8 @@ import (
 
 func RegisterCommentRoutes(router *gin.RouterGroup) {
 	router.GET("/articleId/:articleId", GetCommentsByArticleId)
-	router.POST("/", UploadComment)
-	router.DELETE("/:id", DeleteComment)
+	router.POST("/", middlewares.RequereAuth, UploadComment)
+	router.DELETE("/:id", middlewares.RequereAuth, DeleteComment)
 }
 
 func GetCommentsByArticleId(c *gin.Context) {
@@ -42,6 +43,7 @@ func GetCommentsByArticleId(c *gin.Context) {
 }
 
 func UploadComment(c *gin.Context) {
+	userId, _ := c.Get("userId")
 	var json dtos.CommentDto
 	if err := c.ShouldBind(&json); err != nil {
 		c.JSON(http.StatusBadRequest, dtos.CreateBadRequestErrorDto(err))
@@ -50,7 +52,7 @@ func UploadComment(c *gin.Context) {
 	err := services.UploadComment(models.CommentModel{
 		ArticleId: json.ArticleId,
 		Content:   json.Content,
-		UserId:    json.UserId,
+		UserId:    userId.(int),
 	})
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database_error", err))

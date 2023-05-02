@@ -5,7 +5,7 @@ import (
 	"GoCommunityAPI/repositories"
 )
 
-func GetArticleList(page int, pageSize int) ([]models.ArticleModel, error) {
+func FetchArticlePage(page int, pageSize int) ([]models.ArticleModel, error) {
 	articles, err := repositories.FetchArticlesPage(page, pageSize)
 	return articles, err
 }

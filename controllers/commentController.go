@@ -12,12 +12,12 @@ import (
 )
 
 func RegisterCommentRoutes(router *gin.RouterGroup) {
-	router.GET("/articleId/:articleId", GetCommentsByArticleId)
+	router.GET("/articleId/:articleId", FetchCommentPageByArticleId)
 	router.POST("/", middlewares.RequereAuth, UploadComment)
 	router.DELETE("/:id", middlewares.RequereAuth, DeleteComment)
 }
 
-func GetCommentsByArticleId(c *gin.Context) {
+func FetchCommentPageByArticleId(c *gin.Context) {
 	articleId, err := strconv.Atoi(c.Param("articleId"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, dtos.CreateErrorDtoWithMessage("You must provide a valid comment id"))
@@ -30,7 +30,7 @@ func GetCommentsByArticleId(c *gin.Context) {
 	if err != nil {
 		pageSize = 5
 	}
-	comments, err := services.GetCommentsByArticleId(articleId, page, pageSize)
+	comments, err := services.FetchCommentPageByArticleId(articleId, page, pageSize)
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database", err))
 		return

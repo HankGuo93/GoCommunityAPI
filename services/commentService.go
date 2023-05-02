@@ -6,8 +6,8 @@ import (
 	"errors"
 )
 
-func GetCommentsByArticleId(articleId int, page int, pageSize int) ([]models.CommentModel, error) {
-	comments, err := repositories.FetchCommentsByArticleId(articleId, page, pageSize)
+func FetchCommentPageByArticleId(articleId int, page int, pageSize int) ([]models.CommentModel, error) {
+	comments, err := repositories.FetchCommentPageByArticleId(articleId, page, pageSize)
 	return comments, err
 }
 

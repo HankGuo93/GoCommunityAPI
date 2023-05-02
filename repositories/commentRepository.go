@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func FetchCommentsByArticleId(articleId int, page int, pageSize int) (comments []models.CommentModel, err error) {
+func FetchCommentPageByArticleId(articleId int, page int, pageSize int) (comments []models.CommentModel, err error) {
 	db := database.DB
 	var entities []entities.CommentEntity
 	var count int64

@@ -12,14 +12,14 @@ import (
 )
 
 func RegisterArticleRoutes(router *gin.RouterGroup) {
-	router.GET("", GetArticleList)
+	router.GET("", FetchArticlePage)
 	router.GET("/:id", GetArticleDetail)
 	router.POST("/", middlewares.RequereAuth, UploadArticle)
 	router.PUT("/:id", middlewares.RequereAuth, UpdateArticle)
 	router.DELETE("/:id", middlewares.RequereAuth, DeleteArticle)
 }
 
-func GetArticleList(c *gin.Context) {
+func FetchArticlePage(c *gin.Context) {
 	page, err := strconv.Atoi(c.Query("page"))
 	if err != nil {
 		page = 1
@@ -28,7 +28,7 @@ func GetArticleList(c *gin.Context) {
 	if err != nil {
 		pageSize = 5
 	}
-	articles, err := services.GetArticleList(page, pageSize)
+	articles, err := services.FetchArticlePage(page, pageSize)
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database", err))
 		return

@@ -6,7 +6,17 @@ import (
 	"GoCommunityAPI/models"
 )
 
-func FindOneUserById(id int) (user models.UserModel, err error) {
+var FindOneUserById func(id int) (user models.UserModel, err error)
+var FindOneUserByEmail func(email string) (user models.UserModel, err error)
+var AddUser func(user models.UserModel) error
+
+func init() {
+	FindOneUserById = findOneUserById
+	FindOneUserByEmail = findOneUserByEmail
+	AddUser = addUser
+}
+
+func findOneUserById(id int) (user models.UserModel, err error) {
 	db := database.DB
 	var entity entities.UserEntity
 	query := db.Model(&entities.UserEntity{})
@@ -22,7 +32,7 @@ func FindOneUserById(id int) (user models.UserModel, err error) {
 	return user, err
 }
 
-func FindOneUserByEmail(email string) (user models.UserModel, err error) {
+func findOneUserByEmail(email string) (user models.UserModel, err error) {
 	db := database.DB
 	var entity entities.UserEntity
 	query := db.Model(&entities.UserEntity{})
@@ -38,7 +48,7 @@ func FindOneUserByEmail(email string) (user models.UserModel, err error) {
 	return user, err
 }
 
-func AddUser(user models.UserModel) error {
+func addUser(user models.UserModel) error {
 	db := database.DB
 	entity := entities.UserEntity{
 		Name:     user.Name,

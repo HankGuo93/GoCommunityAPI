@@ -7,7 +7,19 @@ import (
 	"time"
 )
 
-func FetchCommentPageByArticleId(articleId int, page int, pageSize int) (comments []models.CommentModel, err error) {
+var FetchCommentPageByArticleId func(articleId int, page int, pageSize int) (comments []models.CommentModel, err error)
+var FindOneComment func(commentId int) (comment models.CommentModel, err error)
+var CreateComment func(comment models.CommentModel) error
+var DeleteComment func(commentId int) error
+
+func init() {
+	FetchCommentPageByArticleId = fetchCommentPageByArticleId
+	FindOneComment = findOneComment
+	CreateComment = createComment
+	DeleteComment = deleteComment
+}
+
+func fetchCommentPageByArticleId(articleId int, page int, pageSize int) (comments []models.CommentModel, err error) {
 	db := database.DB
 	var entities []entities.CommentEntity
 	var count int64
@@ -41,7 +53,7 @@ func FetchCommentPageByArticleId(articleId int, page int, pageSize int) (comment
 	return comments, err
 }
 
-func FindOneComment(commentId int) (comment models.CommentModel, err error) {
+func findOneComment(commentId int) (comment models.CommentModel, err error) {
 	db := database.DB
 	var entity entities.CommentEntity
 	query := db.Preload("User").Model(&entities.CommentEntity{})
@@ -65,7 +77,7 @@ func FindOneComment(commentId int) (comment models.CommentModel, err error) {
 	return comment, err
 }
 
-func CreateComment(comment models.CommentModel) error {
+func createComment(comment models.CommentModel) error {
 	db := database.DB
 	entity := entities.CommentEntity{
 		Content:   comment.Content,
@@ -76,7 +88,7 @@ func CreateComment(comment models.CommentModel) error {
 	return err
 }
 
-func DeleteComment(commentId int) error {
+func deleteComment(commentId int) error {
 	db := database.DB
 	query := db.Model(&entities.CommentEntity{}).Where("id = ?", commentId)
 	err := query.Update("deleted_at", time.Time.Unix(time.Now())).Error

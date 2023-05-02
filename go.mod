@@ -6,9 +6,15 @@ require (
 	github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1
 	github.com/gin-gonic/gin v1.9.0
 	github.com/joho/godotenv v1.5.1
+	github.com/stretchr/testify v1.8.1
 	gopkg.in/go-playground/validator.v8 v8.18.2
 	gorm.io/driver/mysql v1.5.0
 	gorm.io/gorm v1.25.0
+)
+
+require (
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 )
 
 require (

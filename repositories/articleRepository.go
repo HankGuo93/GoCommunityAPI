@@ -8,7 +8,21 @@ import (
 	"time"
 )
 
-func FetchArticlesPage(page int, pageSize int) (article []models.ArticleModel, err error) {
+var FetchArticlesPage func(page int, pageSize int) (article []models.ArticleModel, err error)
+var FindOneArticle func(articleId int) (article models.ArticleModel, err error)
+var CreateArticle func(article models.ArticleModel) error
+var UpdateArticle func(article models.ArticleModel) error
+var DeleteArticle func(articleId int) error
+
+func init() {
+	FetchArticlesPage = fetchArticlesPage
+	FindOneArticle = findOneArticle
+	CreateArticle = createArticle
+	UpdateArticle = updateArticle
+	DeleteArticle = deleteArticle
+}
+
+func fetchArticlesPage(page int, pageSize int) (article []models.ArticleModel, err error) {
 	db := database.DB
 	var entities []entities.ArticleEntity
 	var count int64
@@ -42,7 +56,7 @@ func FetchArticlesPage(page int, pageSize int) (article []models.ArticleModel, e
 	return article, err
 }
 
-func FindOneArticle(articleId int) (article models.ArticleModel, err error) {
+func findOneArticle(articleId int) (article models.ArticleModel, err error) {
 	db := database.DB
 	var entity entities.ArticleEntity
 	query := db.Preload("User").Model(&entities.ArticleEntity{})
@@ -67,7 +81,7 @@ func FindOneArticle(articleId int) (article models.ArticleModel, err error) {
 	return article, err
 }
 
-func CreateArticle(article models.ArticleModel) error {
+func createArticle(article models.ArticleModel) error {
 	db := database.DB
 	entity := entities.ArticleEntity{
 		Title:   article.Title,
@@ -78,7 +92,7 @@ func CreateArticle(article models.ArticleModel) error {
 	return err
 }
 
-func UpdateArticle(article models.ArticleModel) error {
+func updateArticle(article models.ArticleModel) error {
 	db := database.DB
 	updateMapping := make(map[string]interface{})
 	entity := entities.ArticleEntity{
@@ -96,7 +110,7 @@ func UpdateArticle(article models.ArticleModel) error {
 	return err
 }
 
-func DeleteArticle(articleId int) error {
+func deleteArticle(articleId int) error {
 	db := database.DB
 	query := db.Model(&entities.ArticleEntity{}).Where("id = ?", articleId)
 	err := query.Update("deleted_at", time.Time.Unix(time.Now())).Error

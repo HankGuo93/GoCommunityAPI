@@ -8,7 +8,15 @@ import (
 	"io/ioutil"
 )
 
-func GetPrivateKey() (*rsa.PrivateKey, error) {
+var GetPrivateKey func() (*rsa.PrivateKey, error)
+var GetPublicKey func() (interface{}, error)
+
+func init() {
+	GetPrivateKey = getPrivateKey
+	GetPublicKey = getPublicKey
+}
+
+func getPrivateKey() (*rsa.PrivateKey, error) {
 	var privateKey *rsa.PrivateKey
 	privateKeyPEMBytes, err := ioutil.ReadFile("private_key.pem")
 	if err != nil {
@@ -25,7 +33,7 @@ func GetPrivateKey() (*rsa.PrivateKey, error) {
 	return privateKey, err
 }
 
-func GetPublicKey() (interface{}, error) {
+func getPublicKey() (interface{}, error) {
 	publicKeyPEMBytes, err := ioutil.ReadFile("public_key.pem")
 	if err != nil {
 		return nil, err

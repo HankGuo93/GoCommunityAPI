@@ -19,6 +19,17 @@ func RegisterArticleRoutes(router *gin.RouterGroup) {
 	router.DELETE("/:id", middlewares.RequereAuth, DeleteArticle)
 }
 
+// FetchArticlePage godoc
+// @Description Retrieve a page of articles
+// @Tags Article
+// @Summary Get a page of articles
+// @ID fetch-article-page
+// @Produce  json
+// @Param page query int false "Page number"
+// @Param pageSize query int false "Page size"
+// @Success 200 {object} gin.H
+// @Failure 422 {object} dtos.ErrorDto
+// @Router /api/article [get]
 func FetchArticlePage(c *gin.Context) {
 	page, err := strconv.Atoi(c.Query("page"))
 	if err != nil {
@@ -40,6 +51,17 @@ func FetchArticlePage(c *gin.Context) {
 	})
 }
 
+// GetArticleDetail godoc
+// @Description Retrieve article by ID
+// @Tags Article
+// @Summary Get article by ID
+// @ID get-article-by-id
+// @Produce  json
+// @Param id path int true "Article ID"
+// @Success 200 {object} gin.H
+// @Failure 400 {object} dtos.ErrorDto
+// @Failure 422 {object} dtos.ErrorDto
+// @Router /api/article/{id} [get]
 func GetArticleDetail(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -62,6 +84,19 @@ func GetArticleDetail(c *gin.Context) {
 	})
 }
 
+// UploadArticle godoc
+// @Description Upload a new article
+// @Tags Article
+// @Summary Upload a new article
+// @ID upload-article
+// @Accept  json
+// @Produce  json
+// @Security ApiKeyAuth
+// @Param article body dtos.ArticleDto true "Article object"
+// @Success 201 {object} gin.H
+// @Failure 400 {object} dtos.ErrorDto
+// @Failure 422 {object} dtos.ErrorDto
+// @Router /api/article [post]
 func UploadArticle(c *gin.Context) {
 	userId, _ := c.Get("userId")
 	var json dtos.ArticleDto
@@ -84,6 +119,20 @@ func UploadArticle(c *gin.Context) {
 		"messages": []string{"Article created successfully"}})
 }
 
+// UpdateArticle godoc
+// @Description Update an article by ID
+// @Tags Article
+// @Summary Update an article by ID
+// @ID update-article-by-id
+// @Accept  json
+// @Produce  json
+// @Security ApiKeyAuth
+// @Param id path int true "Article ID"
+// @Param article body dtos.ArticleDto true "Article object"
+// @Success 200 {string} string
+// @Failure 400 {object} dtos.ErrorDto
+// @Failure 422 {object} dtos.ErrorDto
+// @Router /api/article/{id} [put]
 func UpdateArticle(c *gin.Context) {
 	userId, _ := c.Get("userId")
 	id, err := strconv.Atoi(c.Param("id"))
@@ -107,6 +156,18 @@ func UpdateArticle(c *gin.Context) {
 	}
 }
 
+// DeleteArticle godoc
+// @Description Delete an article by ID
+// @Tags Article
+// @Summary Delete an article by ID
+// @ID delete-article-by-id
+// @Produce  json
+// @Security ApiKeyAuth
+// @Param id path int true "Article ID"
+// @Success 200 {string} string
+// @Failure 400 {object} dtos.ErrorDto
+// @Failure 422 {object} dtos.ErrorDto
+// @Router /api/article/{id} [delete]
 func DeleteArticle(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {

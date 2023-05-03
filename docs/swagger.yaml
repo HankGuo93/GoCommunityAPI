@@ -1,0 +1,401 @@
+definitions:
+  dtos.ArticleDto:
+    properties:
+      content:
+        type: string
+      createdAt:
+        type: integer
+      deletedAt:
+        type: integer
+      id:
+        type: integer
+      title:
+        type: string
+      updatedAt:
+        type: integer
+      user:
+        $ref: '#/definitions/dtos.UserDto'
+      userId:
+        type: integer
+    type: object
+  dtos.CommentDto:
+    properties:
+      articleId:
+        type: integer
+      content:
+        type: string
+      createdAt:
+        type: integer
+      deletedAt:
+        type: integer
+      id:
+        type: integer
+      updatedAt:
+        type: integer
+      user:
+        $ref: '#/definitions/dtos.UserDto'
+      userId:
+        type: integer
+    type: object
+  dtos.ErrorDto:
+    properties:
+      errors:
+        additionalProperties: true
+        type: object
+      message:
+        items:
+          type: string
+        type: array
+      success:
+        type: boolean
+    type: object
+  dtos.UserDto:
+    properties:
+      createdAt:
+        type: integer
+      deletedAt:
+        type: integer
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+      updatedAt:
+        type: integer
+    type: object
+  gin.H:
+    additionalProperties: {}
+    type: object
+info:
+  contact: {}
+paths:
+  /api/article:
+    get:
+      description: Retrieve a page of articles
+      operationId: fetch-article-page
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dtos.ErrorDto'
+      summary: Get a page of articles
+      tags:
+      - Article
+    post:
+      consumes:
+      - application/json
+      description: Upload a new article
+      operationId: upload-article
+      parameters:
+      - description: Article object
+        in: body
+        name: article
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.ArticleDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dtos.ErrorDto'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dtos.ErrorDto'
+      security:
+      - ApiKeyAuth: []
+      summary: Upload a new article
+      tags:
+      - Article
+  /api/article/{id}:
+    delete:
+      description: Delete an article by ID
+      operationId: delete-article-by-id
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dtos.ErrorDto'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dtos.ErrorDto'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete an article by ID
+      tags:
+      - Article
+    get:
+      description: Retrieve article by ID
+      operationId: get-article-by-id
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dtos.ErrorDto'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dtos.ErrorDto'
+      summary: Get article by ID
+      tags:
+      - Article
+    put:
+      consumes:
+      - application/json
+      description: Update an article by ID
+      operationId: update-article-by-id
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Article object
+        in: body
+        name: article
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.ArticleDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dtos.ErrorDto'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dtos.ErrorDto'
+      security:
+      - ApiKeyAuth: []
+      summary: Update an article by ID
+      tags:
+      - Article
+  /api/comment/:
+    post:
+      consumes:
+      - application/json
+      description: Create a new comment
+      parameters:
+      - description: Comment object that needs to be added
+        in: body
+        name: comment
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.CommentDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dtos.ErrorDto'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dtos.ErrorDto'
+      security:
+      - ApiKeyAuth: []
+      summary: Upload a comment
+      tags:
+      - Comment
+  /api/comment/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a comment by ID
+      parameters:
+      - description: Comment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dtos.ErrorDto'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dtos.ErrorDto'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a comment
+      tags:
+      - Comment
+  /api/comment/articleId/{articleId}:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of comments for a given article
+      parameters:
+      - description: Article ID
+        in: path
+        name: articleId
+        required: true
+        type: integer
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Number of comments per page
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dtos.ErrorDto'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dtos.ErrorDto'
+      summary: Fetch comments by article ID
+      tags:
+      - Comment
+  /api/user/:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user
+      parameters:
+      - description: User object to be created
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.UserDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/gin.H'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dtos.ErrorDto'
+      summary: Create user
+      tags:
+      - User
+  /api/user/{email}:
+    get:
+      description: Get user by email
+      parameters:
+      - description: User Email
+        in: path
+        name: email
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dtos.ErrorDto'
+      summary: Find user by email
+      tags:
+      - User
+  /api/user/login:
+    post:
+      consumes:
+      - application/json
+      description: Login with user email and password
+      parameters:
+      - description: User email and password
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.UserDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dtos.ErrorDto'
+      summary: User login
+      tags:
+      - User
+swagger: "2.0"

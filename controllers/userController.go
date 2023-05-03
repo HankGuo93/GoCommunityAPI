@@ -15,6 +15,13 @@ func RegisterUserRoutes(router *gin.RouterGroup) {
 	router.POST("/login", Login)
 }
 
+// @Summary Find user by email
+// @Description Get user by email
+// @Tags User
+// @Param email path string true "User Email"
+// @Success 200 {object} gin.H
+// @Failure 422 {object} dtos.ErrorDto
+// @Router /api/user/{email} [get]
 func FindUser(c *gin.Context) {
 	email := c.Param("email")
 	user, err := services.GetUser(email)
@@ -32,6 +39,15 @@ func FindUser(c *gin.Context) {
 	})
 }
 
+// @Summary Create user
+// @Description Create a new user
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param input body dtos.UserDto true "User object to be created"
+// @Success 201 {object} gin.H
+// @Failure 422 {object} dtos.ErrorDto
+// @Router /api/user/ [post]
 func UserRegistration(c *gin.Context) {
 	var json dtos.UserDto
 	if err := c.ShouldBindJSON(&json); err != nil {
@@ -53,6 +69,15 @@ func UserRegistration(c *gin.Context) {
 		"messages": []string{"User created successfully"}})
 }
 
+// @Summary User login
+// @Description Login with user email and password
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param input body dtos.UserDto true "User email and password"
+// @Success 200 {object} gin.H
+// @Failure 401 {object} dtos.ErrorDto
+// @Router /api/user/login [post]
 func Login(c *gin.Context) {
 	var json dtos.UserDto
 	if err := c.ShouldBindJSON(&json); err != nil {

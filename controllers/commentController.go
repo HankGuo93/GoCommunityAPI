@@ -17,6 +17,18 @@ func RegisterCommentRoutes(router *gin.RouterGroup) {
 	router.DELETE("/:id", middlewares.RequereAuth, DeleteComment)
 }
 
+// @Summary Fetch comments by article ID
+// @Description Get a list of comments for a given article
+// @Tags Comment
+// @Accept json
+// @Produce json
+// @Param articleId path int true "Article ID"
+// @Param page query int false "Page number"
+// @Param pageSize query int false "Number of comments per page"
+// @Success 200 {object} gin.H
+// @Failure 400 {object} dtos.ErrorDto
+// @Failure 422 {object} dtos.ErrorDto
+// @Router /api/comment/articleId/{articleId} [get]
 func FetchCommentPageByArticleId(c *gin.Context) {
 	articleId, err := strconv.Atoi(c.Param("articleId"))
 	if err != nil {
@@ -42,6 +54,17 @@ func FetchCommentPageByArticleId(c *gin.Context) {
 	})
 }
 
+// @Summary Upload a comment
+// @Description Create a new comment
+// @Tags Comment
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param comment body dtos.CommentDto true "Comment object that needs to be added"
+// @Success 201 {object} gin.H
+// @Failure 400 {object} dtos.ErrorDto
+// @Failure 422 {object} dtos.ErrorDto
+// @Router /api/comment/ [post]
 func UploadComment(c *gin.Context) {
 	userId, _ := c.Get("userId")
 	var json dtos.CommentDto
@@ -63,6 +86,17 @@ func UploadComment(c *gin.Context) {
 		"messages": []string{"Comment created successfully"}})
 }
 
+// @Summary Delete a comment
+// @Description Delete a comment by ID
+// @Tags Comment
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param id path int true "Comment ID"
+// @Success 200 {object} gin.H
+// @Failure 400 {object} dtos.ErrorDto
+// @Failure 422 {object} dtos.ErrorDto
+// @Router /api/comment/{id} [delete]
 func DeleteComment(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {

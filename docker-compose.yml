@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  communitymysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: Community
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+  gocommunityapi:
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - communitymysql
+
+volumes:
+  db-data:

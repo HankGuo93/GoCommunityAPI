@@ -19,7 +19,7 @@ func FindUser(c *gin.Context) {
 	email := c.Param("email")
 	user, err := services.GetUser(email)
 	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database", err))
+		c.JSON(http.StatusUnprocessableEntity, dtos.CreateErrorDto("database", err))
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
@@ -44,7 +44,7 @@ func UserRegistration(c *gin.Context) {
 		Email:    json.Email,
 		Password: json.Password,
 	}); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database", err))
+		c.JSON(http.StatusUnprocessableEntity, dtos.CreateErrorDto("database", err))
 		return
 	}
 
@@ -66,7 +66,7 @@ func Login(c *gin.Context) {
 	})
 
 	if err != nil {
-		c.JSON(http.StatusForbidden, dtos.CreateDetailedErrorDto("login", err))
+		c.JSON(http.StatusForbidden, dtos.CreateErrorDto("login", err))
 		return
 	}
 

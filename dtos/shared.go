@@ -43,17 +43,21 @@ func CreateBadRequestErrorDto(err error) ErrorDto {
 	return res
 }
 
-func CreateDetailedErrorDto(key string, err error) map[string]interface{} {
-	return map[string]interface{}{
-		"success":  false,
-		"messages": []string{fmt.Sprintf("%s -> %v", key, err.Error())},
-		"errors":   err,
+func CreateErrorDto(key string, err error) ErrorDto {
+	return ErrorDto{
+		BaseDto: BaseDto{
+			Success:  false,
+			Messages: []string{fmt.Sprintf("%s -> %v", key, err.Error())},
+		},
+		Errors: map[string]interface{}{"Error": err},
 	}
 }
 
-func CreateErrorDtoWithMessage(message string) map[string]interface{} {
-	return map[string]interface{}{
-		"success":       false,
-		"full_messages": []string{message},
+func CreateErrorDtoWithMessage(message string) ErrorDto {
+	return ErrorDto{
+		BaseDto: BaseDto{
+			Success:  false,
+			Messages: []string{message},
+		},
 	}
 }

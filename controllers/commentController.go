@@ -32,7 +32,7 @@ func FetchCommentPageByArticleId(c *gin.Context) {
 	}
 	comments, err := services.FetchCommentPageByArticleId(articleId, page, pageSize)
 	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database", err))
+		c.JSON(http.StatusUnprocessableEntity, dtos.CreateErrorDto("database", err))
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
@@ -55,7 +55,7 @@ func UploadComment(c *gin.Context) {
 		UserId:    userId.(int),
 	})
 	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database_error", err))
+		c.JSON(http.StatusUnprocessableEntity, dtos.CreateErrorDto("database_error", err))
 		return
 	}
 	c.JSON(http.StatusCreated, gin.H{
@@ -70,7 +70,7 @@ func DeleteComment(c *gin.Context) {
 	}
 	err = services.DeleteComment(id)
 	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database_error", err))
+		c.JSON(http.StatusUnprocessableEntity, dtos.CreateErrorDto("database_error", err))
 		return
 	}
 }

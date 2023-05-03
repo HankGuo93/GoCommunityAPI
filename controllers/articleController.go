@@ -30,7 +30,7 @@ func FetchArticlePage(c *gin.Context) {
 	}
 	articles, err := services.FetchArticlePage(page, pageSize)
 	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database", err))
+		c.JSON(http.StatusUnprocessableEntity, dtos.CreateErrorDto("database", err))
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
@@ -47,7 +47,7 @@ func GetArticleDetail(c *gin.Context) {
 	}
 	article, err := services.GetArticleDetail(id)
 	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database", err))
+		c.JSON(http.StatusUnprocessableEntity, dtos.CreateErrorDto("database", err))
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
@@ -75,7 +75,7 @@ func UploadArticle(c *gin.Context) {
 		UserId:  userId.(int),
 	})
 	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database_error", err))
+		c.JSON(http.StatusUnprocessableEntity, dtos.CreateErrorDto("database_error", err))
 		return
 	}
 
@@ -102,7 +102,7 @@ func UpdateArticle(c *gin.Context) {
 		UserId:  userId.(int),
 	})
 	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database_error", err))
+		c.JSON(http.StatusUnprocessableEntity, dtos.CreateErrorDto("database_error", err))
 		return
 	}
 }
@@ -114,7 +114,7 @@ func DeleteArticle(c *gin.Context) {
 	}
 	err = services.DeleteArticle(id)
 	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, dtos.CreateDetailedErrorDto("database_error", err))
+		c.JSON(http.StatusUnprocessableEntity, dtos.CreateErrorDto("database_error", err))
 		return
 	}
 }
